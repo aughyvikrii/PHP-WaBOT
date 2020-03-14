@@ -60,7 +60,10 @@
 
         $db = "db_{$database['type']}";
 
-        if( !file_exists(BASE_PATH."/system/lib/db/{$db}.php") ) die("~Error: database file {$db} doesn't exists");
+        if( !file_exists(BASE_PATH."/system/lib/db/{$db}.php") ) die(json_encode([
+            'error' => "database file {$db} doesn't exists"
+        ]));
+        // die("~Error: database file {$db} doesn't exists");
 
         require_once BASE_PATH."/system/lib/db/{$db}.php";
 
@@ -91,7 +94,9 @@
         else if( $eventType == 'follow' ) return 'follow';
         else {
             if( DEBUG ) $this->reply("~reply type not recognized");
-            die("~ERROR");
+            die(json_encode([
+                'error' => "reply type not recognized"
+            ]));
         }
         
     }
@@ -137,7 +142,9 @@
 
         if( !file_exists($path) ){
             if( DEBUG ) $this->response("~File {$file} doesn't exists.");
-            die("~File {$file} doesn't exists.");
+            die(json_encode([
+                'error' => "File {$file} doesn't exists."
+            ]));
         }
 
         if( empty($this->assign) ) $this->assign = array();
@@ -154,7 +161,9 @@
 
         if ( !$replyToken ) {
             // if( DEBUG ) $this->response("~Chat ID not define");
-            die("~Reply Token Not Defined");
+            die(json_encode([
+                'error' => 'Reply Token Not Defined'
+            ]));
         } else {
             ReplyChat($replyToken,$text);
         }
