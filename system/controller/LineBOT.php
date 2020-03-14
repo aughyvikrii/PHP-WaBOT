@@ -271,6 +271,10 @@
             case 'group_id';
                 return @$this->data['events'][0]['source']['groupId'];
             break;
+            
+            case 'room_id';
+                return @$this->data['events'][0]['source']['roomId'];
+            break;
 
             default:
                 die("case '{$conf}' unknown");

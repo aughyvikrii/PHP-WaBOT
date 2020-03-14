@@ -21,4 +21,12 @@ class Controller extends LineBOT {
 
         leaveGroup($groupId);
     }
+
+
+    public function leaveRoom($roomId=false){
+        if(!$roomId) $roomId = $this->get("room_id");
+        if( !$roomId ) return parent::responseError("which room? [".LOG_ID."]");
+
+        leaveRoom($roomId);
+    }
 }

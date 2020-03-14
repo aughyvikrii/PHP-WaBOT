@@ -80,9 +80,9 @@ $route['room'] = [
      * Chat from user
      */
     "text"      => [
-        'halo'      => 'GroupController@halo',
-        'say *'     => 'GroupController@say_what',
-        'leave'     => 'GroupController@leave',
+        'halo'      => 'RoomController@halo',
+        'say *'     => 'RoomController@say_what',
+        'leave'     => 'RoomController@leave',
     ],
 
 ];
