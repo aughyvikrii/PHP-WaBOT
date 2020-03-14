@@ -73,10 +73,16 @@ $route['group'] = [
  */
 $route['room'] = [
 
-    // First time join room
-    'join'      => 'ExampleController@room_join',
+    // First time join group
+    'join'      => 'GroupController@join',
     
-    // When someone send chat to room
-    'text'      => []
+    /**
+     * Chat from user
+     */
+    "text"      => [
+        'halo'      => 'GroupController@halo',
+        'say *'     => 'GroupController@say_what',
+        'leave'     => 'GroupController@leave',
+    ],
 
 ];

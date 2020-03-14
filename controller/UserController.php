@@ -45,7 +45,7 @@ class UserController extends Controller {
     public function location() {
 
         $response = "You send the location";
-        $response .= "\name : ".$this->data['events'][0]['message']['address'];
+        $response .= "\nName : ".$this->data['events'][0]['message']['address'];
         $response .= "\nlatitude : ".$this->data['events'][0]['message']['latitude'];
         $response .= "\nlongitude : ".$this->data['events'][0]['message']['longitude'];
 
