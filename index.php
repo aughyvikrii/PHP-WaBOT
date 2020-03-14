@@ -9,6 +9,7 @@
  */
 
 header("Content-Type: application/json");
+date_default_timezone_set('Asia/Jakarta');
 
 ## time bot start
 define("BOT_START",microtime(true));

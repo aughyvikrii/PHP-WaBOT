@@ -4,7 +4,7 @@
  * Global function
  */
 
-function ApiRequest($url,$data=false,$method='GET')
+function ApiRequest($url,$method='GET',$data=false,$header=array())
 {
 
     $header[] = 'Authorization: Bearer '.CHANNEL_ACCESS_TOKEN;
@@ -12,18 +12,10 @@ function ApiRequest($url,$data=false,$method='GET')
     $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
 
-        if( $data ) {
-            $header[] = 'Content-Type: application/json';
-
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS,$data);
-
-        }
-
         switch( strtoupper($method) ){
             case 'POST':
                 curl_setopt($ch, CURLOPT_POST, true);
-                curl_setopt($ch, CURLOPT_POSTFIELDS,'');
+                curl_setopt($ch, CURLOPT_POSTFIELDS,$data);
                 break;
             
             case 'GET': break;
@@ -66,7 +58,7 @@ function ReplyChat($replyToken, $pesan)
 }
 
 function GetUserAccount($userId) {
-    return ApiRequest("https://api.line.me/v2/bot/profile/{$userId}");
+    return ApiRequest("https://api.line.me/v2/bot/profile/{$userId}",'GET');
 }
 
 function PushMessage($data){
@@ -74,7 +66,7 @@ function PushMessage($data){
 }
 
 function leaveGroup($groupId){
-    return ApiRequest("https://api.line.me/v2/bot/group/{$groupId}/leave",false,'POST');
+    return ApiRequest("https://api.line.me/v2/bot/group/{$groupId}/leave",'POST');
 }
 
 function leaveRoom($roomId){
@@ -115,4 +107,22 @@ function clean_log($id,$full=false){
     if($full) $data = [];
     
     put_log($id,$data);
+}
+
+function log_error($message,$with_response_web=true,$die=true){
+
+    error_log("[".date("Y-m-d H:i:s")."] $message\n",3,ERROR_LOG_FILE);
+
+    $log = "message:\n$message\n\n";
+    $log .= "request:\n ".file_get_contents("php://input")."\n\n";
+
+    file_put_contents(BASE_PATH."/log/error-".LOG_ID.".json",$log);
+    
+    if( $with_response_web ){
+        echo json_encode([
+            'error' => $message
+        ]);
+    }
+
+    if($die) die;
 }

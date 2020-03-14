@@ -1,57 +1,37 @@
-<?php
+<?php if( !defined("BOT_START") ) die("Direct access is not allowed.");
 
 /**
  * GroupController
+ * sample controller
  */
 
- class GroupController extends Main_Controller {
+class GroupController extends Controller {
 
-    public function greeting_message() {
-        $message = "Terimakasih telah menambahkan BOT ini.\n\nSilahkan ketik 'tentang bot' untung informasi lebih lanjut";   
-
-        return $this->reply($message);
+    public function join() {
+        return $this->response("Thank you for adding me to this group");
     }
 
-    public function sapa() {
-
-        $user_id = $this->data['events'][0]['source']['userId'];
-
-        $account_data = $this->getAccountData($user_id);
-
-        $this->reply("Hallo ".$account_data['displayName']);
+    public function leave() {
+        $this->response("Goodbye :(");
+        $this->leaveGroup();
     }
 
-    public function about(){
+    public function halo() {
+        $message = 'Oh hai';
+        if( $userId = $this->get('user_id') ){
 
-        $view = $this->view("group/about");
+            $user_account = parent::GetUserAccount($userId);
 
-        return $this->reply($view);
+            $message .= " ".$user_account['displayName'];
+            
+        }
+
+        return $this->response($message);
     }
 
-    public function command(){
+    public function say_what(){
+        $segment = $this->segment(2);
 
-        $view = $this->view("group/command");
-
-        return $this->reply($view);
+        return $this->response("{$segment}");
     }
-
-    public function leave(){
-
-        $group_id = $this->data['events'][0]['source']['groupId'];
-
-        $this->reply("Goodbye.");
-
-        leaveGroup($group_id);
-
-    }
-
-    public function leave_room(){
-
-        $room_id = $this->data['events'][0]['source']['roomId'];
-
-        $this->reply("Goodbye.");
-
-        leaveRoom($room_id);
-
-    }
- }
+}

@@ -25,19 +25,9 @@
     public $data;
 
     /**
-     * Final exec route
-     */
-    private $exec_route;
-
-
-    /**
      * Assign Data
      */
     public $assign = array();
-
-    public function admin_id(){
-        return 'U076c6d4a1bdec204e219657110533976';
-    }
 
     public function __construct() {
 
@@ -156,18 +146,27 @@
         return ob_get_clean();
     }
 
-    public function reply($text,$replyToken=false) {
+    public function echoJson($array){
+        echo json_encode($array);
+        die;
+    }
+
+    public function response($text,$replyToken=false) {
         if( !$replyToken ) $replyToken = $this->data['events'][0]['replyToken'];
 
         if ( !$replyToken ) {
-            // if( DEBUG ) $this->response("~Chat ID not define");
-            die(json_encode([
-                'error' => 'Reply Token Not Defined'
-            ]));
+            $log = "ERROR[".LOG_ID."] Reply Token Not Defined";
+            error_log($log);
+            echoJson([ 'error' => $log ]);
         } else {
             ReplyChat($replyToken,$text);
         }
 
+    }
+
+    public function responseError($text){
+        log_error($text);
+        self::response($text);
     }
 
     public function sendMessage($to,$message,$notif=false){
@@ -191,12 +190,15 @@
     }
 
     public function segment($index=null){
-        $type = $this->dataType();
+        $event_type     = $this->get('event_type');
+        $event_source   = $this->get('event_source');
+        $event_category = $this->get('event_category');
+        $text           = $this->get('text');
 
         $index -= 1;
 
-        if( $type == 'text' ){
-            $split = explode(" ",$this->get_text());
+        if( $event_category == 'text' ){
+            $split = explode(" ",strtolower($text));
         } else if ( $type == 'postback' ) {
             $split_1 = explode("&",$this->data['events'][0]['postback']['data']);
             $postdata = [];
@@ -219,5 +221,62 @@
 
         return $this->data['events'][0]['source']['type'];
 
+    }
+
+    public function get($conf){
+
+        switch(strtolower($conf)){
+
+            /**
+             * Event type
+             */
+            case 'event_type':
+                return @$this->data['events'][0]['type'];
+            break;
+
+            /**
+             * Source type
+             */
+
+            case 'event_source':
+                return $this->data['events'][0]['source']['type'];
+            break;
+
+            /**
+             * event_category
+             * this is based on message type that user send
+             */
+
+            case 'event_category':
+
+                $category = @$this->data['events'][0]['message']['type'];
+
+                if( !$category ) return 'unknown';
+                else return $category;
+
+            break;
+
+            /**
+             * text
+             */
+
+            case 'text':
+                return @$this->data['events'][0]['message']['text'];
+            break;
+
+            case 'user_id';
+                return @$this->data['events'][0]['source']['userId'];
+            break;
+
+            case 'group_id';
+                return @$this->data['events'][0]['source']['groupId'];
+            break;
+
+            default:
+                die("case '{$conf}' unknown");
+            break;
+        }
+
+        return false;
     }
  }

@@ -1,0 +1,27 @@
+message:
+An error has occurred, report to the admin! [NF-5e6d0c8d1e625]
+
+request:
+ {
+    "events": [
+        {
+            "type": "message",
+            "replyToken": "5711d5101c164b25a559d3e647f52013",
+            "source": {
+                "userId": "U13eb6fe81ea26543f77d1e46938ad990",
+                "type": "user"
+            },
+            "timestamp": 1584200273828,
+            "mode": "active",
+            "message": {
+                "type": "image",
+                "id": "11598321880638",
+                "contentProvider": {
+                    "type": "line"
+                }
+            }
+        }
+    ],
+    "destination": "Ub1b11ff67fc8ae02267548fcf57e84d0"
+}
+
