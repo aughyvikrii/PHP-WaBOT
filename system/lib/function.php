@@ -54,7 +54,9 @@ function ReplyChat($replyToken, $pesan)
         $data['messages'] = [ $pesan ];
     }
 
-    return ApiRequest('https://api.line.me/v2/bot/message/reply',json_encode($data));
+    return ApiRequest('https://api.line.me/v2/bot/message/reply','POST',json_encode($data),[
+        'Content-Type: application/json'
+    ]);
 }
 
 function GetUserAccount($userId) {
