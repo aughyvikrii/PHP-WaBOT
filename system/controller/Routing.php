@@ -104,7 +104,10 @@
             if( $this->get_source() == 'user' ){
                 if( DEBUG ) $this->reply("Maksudnya '{$this->get_text()}' apa?");
             }
-            die("~ERROR");
+            echo json_encode([
+                'error' => 'Route not found'
+            ]);
+            die;
         }
 
         $this->exec_route = $route_set;
