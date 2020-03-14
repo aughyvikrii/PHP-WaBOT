@@ -1,9 +1,9 @@
-﻿# PHP-TelegramBOT
+﻿# PHP-LineBOT
 
-PHP Framework For Telegram BOT
+PHP Framework For Line BOT
 
 made based on my own needs
 
-php version 7.4.1
+rebuild from https://github.com/aughyvikrii/PHP-TelegramBOT
 
-BOT Demo t.me/clfv1_bot
+php version 7.4.1
