@@ -72,7 +72,7 @@ function leaveGroup($groupId){
 }
 
 function leaveRoom($roomId){
-    return ApiRequest("https://api.line.me/v2/bot/room/{$roomId}/leave",false,'POST');
+    return ApiRequest("https://api.line.me/v2/bot/room/{$roomId}/leave",'POST');
 }
 
 function pre($data,$die=false) {
