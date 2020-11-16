@@ -4,7 +4,7 @@
  * Mainclass LineBOT
  */
 
- class LineBOT {
+ class WaBOT {
 
     /**
      * Config variable, all config should be here
@@ -133,7 +133,7 @@
         if( !file_exists($path) ){
             if( DEBUG ) $this->response("~File {$file} doesn't exists.");
             die(json_encode([
-                'error' => "File {$file} doesn't exists."
+                'error' => "Views {$file} doesn't exists."
             ]));
         }
 
@@ -227,19 +227,20 @@
 
         switch(strtolower($conf)){
 
-            /**
-             * Event type
-             */
-            case 'event_type':
-                return @$this->data['events'][0]['type'];
+            case 'type':
+                return @$this->data['type'];
             break;
 
-            /**
-             * Source type
-             */
+            case 'source':
+                return @$this->data['source'];
+            break;
 
-            case 'event_source':
-                return $this->data['events'][0]['source']['type'];
+            case 'from':
+                return @$this->data['from'];
+            break;
+
+            case 'device':
+                return @$this->data['device'];
             break;
 
             /**
@@ -261,7 +262,7 @@
              */
 
             case 'text':
-                return @$this->data['events'][0]['message']['text'];
+                return @$this->data['text'];
             break;
 
             case 'user_id';

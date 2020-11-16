@@ -4,47 +4,57 @@
  * Personal Chat
  */
 $route['user'] = [
-
-    /**
-     * First time someone add BOT
-     */
-    "follow"    => "UserController@follow",
-    "unfollow"  => "UserController@unfollow",
-
+    
     /**
      * Chat from user
      */
-    "text"      => [
-        'halo'      => 'UserController@halo',
-        'say *'     => 'UserController@say_what',
-        '*'         => 'UserController@not_understand'
+    "message"      => [
+        'help'  => 'UserController@help',
+        '*'     => 'UserController@not_understand'
     ],
 
     /**
      * If User send image
      */
-    "image"     => "UserController@image",
+    "image"     => "UserController@media",
+    
+    /**
+     * If User send video
+     */
+    "video"     => "UserController@media",
+    
     
     /**
      * If user send location
      */
-    "location"  => "UserController@location",
+    "location"  => "UserController@media",
+
+    /**
+     * If user send live_location
+     */
+    "live_location"  => "UserController@media",
 
     /**
      * if user send audio
      */
-    "audio"     => "UserController@audio",
+    "audio"     => "UserController@media",
 
     /**
      * if user send chat
      */
-    "sticker"   => "UserController@sticker",
+    "sticker"   => "UserController@media",
 
     /**
      * if user send file
      */
 
-     "file"     => "UserController@file",
+     "document"     => "UserController@media",
+
+    /**
+     * if user send contact
+     */
+
+     "contact"     => "UserController@media",
 ];
 
 
@@ -52,37 +62,11 @@ $route['user'] = [
  * Group Chat
  */
 $route['group'] = [
-
-    // First time join group
-    'join'      => 'GroupController@join',
-    
     /**
      * Chat from user
      */
-    "text"      => [
+    "message"      => [
         'halo'      => 'GroupController@halo',
-        'say *'     => 'GroupController@say_what',
-        'leave'     => 'GroupController@leave',
-    ],
-
-];
-
-
-/**
- * Room chat
- */
-$route['room'] = [
-
-    // First time join group
-    'join'      => 'GroupController@join',
-    
-    /**
-     * Chat from user
-     */
-    "text"      => [
-        'halo'      => 'RoomController@halo',
-        'say *'     => 'RoomController@say_what',
-        'leave'     => 'RoomController@leave',
     ],
 
 ];

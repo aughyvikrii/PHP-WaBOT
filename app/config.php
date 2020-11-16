@@ -7,18 +7,16 @@
 $config = [
 
     // Bot Identify
-    "bot_name"              => "",
-    "bot_link"              => "",
-    "channel_secret"        => "",
-    "channel_access_token"  => "",
+    "api_base_url" => 'https://wablastgo.com/api/v1',
+    "api_key"  => "",
 
     // Database config
     "database"  => [
         "type"  => "mysql",
-        "host"  => "",
-        "user"  => "",
+        "host"  => "localhost",
+        "user"  => "root",
         "pass"  => "",
-        "db"    => ""
+        "db"    => "wablastgo"
     ],
 
     // Debug BOT

@@ -7,64 +7,43 @@
 
 class UserController extends Controller {
 
-    public function follow() {
-        return $this->response("Thank you for adding this BOT");
-    }
+    /**
+     * help function
+     * information about command
+     */
 
-    public function unfollow() {
-        // forget all memories with him
+    public function help() {
+        $view = $this->view('help');
+
+        reply($view);
     }
 
     public function not_understand() {
-        return $this->response("Oh baby i don't understand what is '{$this->get('text')}' means :(");
+        reply('Perintah tidak dikenali');
     }
 
-    public function halo() {
-        $message = 'Oh hai';
-        if( $userId = $this->get('user_id') ){
+    public function media() {
+        $message_id = get_var('message_id');
+        $media_path = BASE_PATH."/media/{$message_id}.json";
+        file_put_contents($media_path,json_encode($this->data));
 
-            $user_account = parent::GetUserAccount($userId);
-
-            $message .= " ".$user_account['displayName'];
-            
-        }
-
-        return $this->response($message);
+        echo "file disimpan $media_path";
     }
 
-    public function say_what(){
-        $segment = $this->segment(2);
+    //Send Image
+    // public function sendImage() {
+    //     $media = "image.jpg";
 
-        return $this->response("{$segment}");
-    }
+    //     $image = file_get_contents($media);
+    //     $image_b64 = base64_encode($image);
 
-    public function image() {
-        return $this->response("You send a picture");
-    }
-
-    public function location() {
-
-        $response = "You send the location";
-        $response .= "\nName : ".$this->data['events'][0]['message']['address'];
-        $response .= "\nlatitude : ".$this->data['events'][0]['message']['latitude'];
-        $response .= "\nlongitude : ".$this->data['events'][0]['message']['longitude'];
-
-        return $this->response($response);
-    }
-
-    public function audio() {
-        return $this->response("You sent a voice recording");
-    }
-
-    public function sticker() {
-        return $this->response("you send a sticker");
-    }
-
-    public function file(){
-        $response = "You send a file";
-        $response .= "\nname : ".$this->data['events'][0]['message']['fileName'];
-        $response .= "\nsize : ".($this->data['events'][0]['message']['fileSize'] / 1000000);
-
-        return $this->response($response);
-    }
+    //     main_curl("send-image",[
+    //         'api_key' => API_KEY,
+    //         'device_key' => get_var('device'),
+    //         'destination' => '081200000001',
+    //         'image' =>  $image_b64,
+    //         'filename' => $media,
+    //         'caption'  => 'Kirim gambar'
+    //     ]);
+    // }
 }

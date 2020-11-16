@@ -1,11 +1,12 @@
 <?php
 
 /**
- * PHP-LineBOT
+ * PHP-WaBOT
  * 
  * Version      : V.1.0
  * Recode From  : PHP TelegramBOT ( https://github.com/aughyvikrii/PHP-TelegramBOT )
  * Recode By    : aughyvikrii < aughyvikrii@gmail.com >
+ * Origin       : PHP-LineBOT < github@aughyvikrii >
  */
 
 header("Content-Type: application/json");

@@ -1,2 +1,0 @@
-[2020-03-14 23:44:16] An error has occurred, report to the admin! [NF-5e6d09e0a6eef]
-[2020-03-14 23:55:41] An error has occurred, report to the admin! [NF-5e6d0c8d1e625]

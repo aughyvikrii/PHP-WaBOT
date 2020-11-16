@@ -4,75 +4,13 @@
  * Global function
  */
 
-function ApiRequest($url,$method='GET',$data=false,$header=array())
-{
+function get_var($varName=FALSE){
+    $input = file_get_contents("php://input");
+    $json_decode = json_decode($input,TRUE);
 
-    $header[] = 'Authorization: Bearer '.CHANNEL_ACCESS_TOKEN;
-
-    $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-
-        switch( strtoupper($method) ){
-            case 'POST':
-                curl_setopt($ch, CURLOPT_POST, true);
-                curl_setopt($ch, CURLOPT_POSTFIELDS,$data);
-                break;
-            
-            case 'GET': break;
-            
-            default: curl_setopt($ch, CURLOPT_CUSTOMREQUEST, strtoupper($method));
-        }
-
-        curl_setopt($ch, CURLOPT_HTTPHEADER,$header);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-    $exec = curl_exec($ch);
-
-    $log = "URL: {$url}";
-    $log .= "\n\n".( is_array($exec) ? json_encode($exec) : $exec );
-
-    file_put_contents(BASE_PATH."/log/log_request.json",$log);
-
-    $json = json_decode($exec,true);
-
-    if( !empty($json) ) return $json;
-    else return false;
-}
-
-function ReplyChat($replyToken, $pesan)
-{
-    $data['replyToken'] = $replyToken;
-
-    if( !is_array($pesan) ){
-        $data['messages'] = [
-            [
-                'type'  => 'text',
-                'text'  => $pesan
-            ]
-        ];
-    } else {
-        $data['messages'] = [ $pesan ];
-    }
-
-    return ApiRequest('https://api.line.me/v2/bot/message/reply','POST',json_encode($data),[
-        'Content-Type: application/json'
-    ]);
-}
-
-function GetUserAccount($userId) {
-    return ApiRequest("https://api.line.me/v2/bot/profile/{$userId}",'GET');
-}
-
-function PushMessage($data){
-    return ApiRequest('https://api.line.me/v2/bot/message/push',json_encode($data));
-}
-
-function leaveGroup($groupId){
-    return ApiRequest("https://api.line.me/v2/bot/group/{$groupId}/leave",'POST');
-}
-
-function leaveRoom($roomId){
-    return ApiRequest("https://api.line.me/v2/bot/room/{$roomId}/leave",'POST');
+    if($varName) {
+        return @$json_decode[$varName];
+    } else return $json_decode;
 }
 
 function pre($data,$die=false) {
@@ -127,4 +65,70 @@ function log_error($message,$with_response_web=true,$die=true){
     }
 
     if($die) die;
+}
+
+function main_curl($url,$params) {
+    $url =  rtrim(API_BASE_URL,"/")."/".ltrim($url,"/");
+
+    $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,http_build_query($params));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    $exec = curl_exec($ch);
+        curl_close($ch);
+    $json_decode = json_decode($exec,TRUE);
+    return empty($json_decode) ? [] : $json_decode;
+}
+
+function sendMessage($message,$destination,$device_key,$quoted_id=FALSE,$quoted_message=FALSE,$quoted_participant=FALSE,$is_group=FALSE) {
+
+    $data = [
+        'api_key' => API_KEY,
+        'device_key' => $device_key,
+        'destination' => $destination,
+        'message' => $message,
+        'quoted_id' => $quoted_id,
+        'quoted_message' => $quoted_message,
+        'quoted_participant' => $quoted_participant
+    ];
+
+    if($is_group) {
+        unset($data['destination']);
+        $data['group_id'] = $destination;
+    }
+
+    return main_curl('send-message',$data);
+}
+
+function sendMessageGroup($message,$destination,$device_key=FALSE,$quoted_id=FALSE,$quoted_message=FALSE,$quoted_participant=FALSE){
+    return sendMessage($message,$destination,$device_key,$quoted_id,$quoted_message,$quoted_participant,TRUE);
+}
+
+function reply($message,$destination=false){
+    $device_key = get_var('device');
+    $quoted_id = get_var('message_id');
+    $quoted_message = get_var('text');
+    $quoted_participant = get_var('from');
+    $is_group = FALSE;
+
+    if(!$destination) {
+        if($group_id = get_var('group_id')) {
+            $is_group = TRUE;
+        } else {
+            $destination = $quoted_participant;
+        }
+    }
+
+    if($quoted_id && $quoted_message && $quoted_participant){
+
+    } else {
+        $quoted_participant = $quoted_message = $quoted_id = FALSE;
+    }
+
+    if($is_group) {
+        return sendMessageGroup($message,$group_id,$device_key,$quoted_id,$quoted_message,$quoted_participant);
+    } else {
+        return sendMessage($message,$destination,$device_key,$quoted_id,$quoted_message,$quoted_participant);
+    }
 }
