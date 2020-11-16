@@ -1,9 +1,5 @@
-﻿# PHP-LineBOT
+﻿# PHP-WaBOT
 
-PHP Framework For Line BOT
-
-made based on my own needs
-
-rebuild from https://github.com/aughyvikrii/PHP-TelegramBOT
-
+PHP Framework For Whatsapp BOT by wablastgo.com
+rebuild from https://github.com/aughyvikrii/PHP-LineBOT
 php version 7.4.1
